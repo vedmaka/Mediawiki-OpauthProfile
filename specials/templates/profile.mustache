@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-xs-12">
+        <p>
+            {{ intro_text }}
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+
+            {{# editable }}
+
+            <div class="form-group">
+                <label for="profile_picture">Picture</label>
+                <input type="file" class="form-control" id="profile_picture" value="" style="line-height: 10px;">
+            </div>
+
+            <div class="form-group">
+                <label for="profile_username">Name</label>
+                <input type="text" class="form-control" id="profile_username" value="">
+            </div>
+
+            <div class="form-group">
+                <label for="profile_location">Location</label>
+                <input type="text" class="form-control" id="profile_location" value="">
+            </div>
+
+            <div class="form-group">
+                <label for="profile_phone">Phone</label>
+                <input type="tel" class="form-control" id="profile_phone" value="">
+            </div>
+
+            <div class="form-group">
+                <label for="profile_website">Website</label>
+                <input type="url" class="form-control" id="profile_website" value="">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" value="Update profile" />
+            </div>
+
+            {{/editable}}
+
+            {{^ editable }}
+
+            {{/editable}}
+
+        </form>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+</div>

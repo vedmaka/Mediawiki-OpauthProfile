@@ -5,10 +5,12 @@ $messages = array();
 
 /* English */
 $messages['en'] = array(
-    'OpauthProfile-credits' => ''
+    'OpauthProfile-credits' => '',
+	'opauthprofile-profilepage-intro-from-social' => ''
 );
 
 /* Russian */
 $messages['ru'] = array(
-    'OpauthProfile-credits' => ''
+    'OpauthProfile-credits' => '',
+    'opauthprofile-profilepage-intro-from-social' => ''
 );

@@ -52,4 +52,38 @@ class OpauthProfileHooks {
 
     }
 
+	/**
+	 * @param string $returnTo
+	 * @param string $returnToQuery
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
+    public static function onPostLoginRedirect( &$returnTo, &$returnToQuery, &$type )
+    {
+		if( $type == 'signup' ) {
+			$type = 'successredirect';
+			$returnToQuery = '';
+			$returnTo = "Special:UserProfile";
+		}
+
+		return true;
+    }
+
+	/**
+	 * @param $redirectTarget
+	 * @param $user
+	 * @param $wasCreated
+	 *
+	 * @return bool
+	 */
+    public static function onOpauthLoginFinalRedirect( &$redirectTarget, $user, $wasCreated )
+    {
+    	if( $wasCreated ) {
+    		$redirectTarget = SpecialPage::getTitleFor('UserProfile')->getFullURL('from_social=yes');
+	    }
+
+        return true;
+    }
+
 }

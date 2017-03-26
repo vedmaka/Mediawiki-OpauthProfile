@@ -45,6 +45,7 @@ $wgExtensionMessagesFiles['OpauthProfile'] = dirname( __FILE__ ) . '/OpauthProfi
 /* Autoload classes */
 $wgAutoloadClasses['OpauthProfile'] = dirname( __FILE__ ) . '/OpauthProfile.class.php';
 $wgAutoloadClasses['OpauthProfileHooks'] = dirname( __FILE__ ) . '/OpauthProfile.hooks.php';
+$wgAutoloadClasses['SpecialUserProfile'] = dirname( __FILE__ ) . '/specials/SpecialUserProfile.php';
 
 /* ORM,MODELS */
 #$wgAutoloadClasses['OpauthProfile_Model_'] = dirname( __FILE__ ) . '/includes/OpauthProfile_Model_.php';
@@ -59,8 +60,10 @@ $wgAutoloadClasses['OpauthProfileHooks'] = dirname( __FILE__ ) . '/OpauthProfile
 #$wgGroupPermissions['sysop']['example_rights'] = true;
 
 /* Special Pages */
-#$wgSpecialPages['OpauthProfile'] = 'OpauthProfileSpecial';
+$wgSpecialPages['UserProfile'] = 'SpecialUserProfile';
 
 /* Hooks */
 $wgHooks['OpauthLoginUserCreated'][] = 'OpauthProfileHooks::onOpauthLoginUserCreated';
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'OpauthProfileHooks::onLoadExtensionSchemaUpdates';
+$wgHooks['PostLoginRedirect'][] = 'OpauthProfileHooks::onPostLoginRedirect';
+$wgHooks['OpauthLoginFinalRedirect'][] = 'OpauthProfileHooks::onOpauthLoginFinalRedirect';
