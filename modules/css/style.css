@@ -1,0 +1,7 @@
+.profile-user-picture-wrapper {
+    margin-bottom: 10px;
+}
+
+.profile-user-picture-wrapper img {
+    max-width: 100px;
+}

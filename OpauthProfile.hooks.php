@@ -86,4 +86,26 @@ class OpauthProfileHooks {
         return true;
     }
 
+	/**
+	 * @param User $user
+	 * @param bool $byEmail
+	 *
+	 * @return bool
+	 */
+    public function onAddNewAccount( $user, $byEmail ) {
+		if( $byEmail ) {
+			if( $user ) {
+
+				$profile = new OpauthProfile( $user->getId() );
+				$profile->name = $user->getRealName() ? $user->getRealName() : null;
+				$profile->email = $user->getEmail() ? $user->getEmail() : null;
+				$profile->provider = 'local';
+				$profile->uid = $user->getId();
+				$profile->save();
+
+			}
+		}
+	    return true;
+    }
+
 }

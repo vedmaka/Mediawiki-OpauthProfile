@@ -11,15 +11,62 @@ class SpecialUserProfile extends SpecialPage {
 
 	public function execute( $subPage ) {
 
+		$this->getOutput()->addModuleStyles('ext.OpauthProfile.main');
+		$this->getOutput()->setPageTitle( wfMessage('opauthprofile-profilepage-special-edit-title')->plain() );
+
 		if( !$this->getUser()->isLoggedIn() ) {
 			$this->displayRestrictionError();
 		}
 
-		$this->displayProfile();
+		if( $this->getRequest()->wasPosted() ) {
+
+			$picture = $this->getRequest()->getUpload('profile_picture');
+			$name = $this->getRequest()->getVal('profile_name');
+			$location = $this->getRequest()->getVal('profile_location');
+			$phone = $this->getRequest()->getVal('profile_phone');
+			$website = $this->getRequest()->getVal('profile_website');
+
+			$profile = new OpauthProfile( $this->getUser()->getId() );
+
+			if( $name ) {
+				$profile->name = $name;
+			}
+
+			if( $location ) {
+				$profile->location = $location;
+			}
+
+			if( $phone ) {
+				$profile->phone = $phone;
+			}
+
+			if( $website ) {
+				$profile->url = $website;
+			}
+
+			// Picture
+			if( !$picture->getError() ) {
+				$uploader = new UploadFromFile();
+				$uploader->initialize( md5($this->getUser()->getName().'_avatar'), $picture );
+				$verify = $uploader->verifyUpload();
+				if( $verify['status'] == UploadBase::OK ) {
+					$status = $uploader->performUpload('user avatar uploaded', '', false, $this->getUser());
+					if( $status->isGood() ) {
+						$picture_url = $uploader->getLocalFile()->createThumb(100);
+						$profile->image = $picture_url;
+					}
+				}
+			}
+
+			$profile->save();
+
+		}
+
+		$this->displayProfile( $this->getRequest()->wasPosted() );
 
 	}
 
-	private function displayProfile() {
+	private function displayProfile( $badge = false ) {
 
 		$data = array(
 			'intro_text' => '',
@@ -27,7 +74,9 @@ class SpecialUserProfile extends SpecialPage {
 			'profile_name' => '',
 			'profile_location' => '',
 			'profile_phone' => '',
-			'profile_website' => ''
+			'profile_website' => '',
+			'badge' => $badge,
+			'badge_text' => wfMessage('opauthprofile-profilepage-special-edit-badge')->plain()
 		);
 
 		$user = $this->getUser();

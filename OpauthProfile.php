@@ -32,11 +32,14 @@ $wgExtensionCredits['specialpage'][] = array(
 
 /* Resource modules */
 $wgResourceModules['ext.OpauthProfile.main'] = array(
-    'localBasePath' => dirname( __FILE__ ) . '/',
+    'localBasePath' => dirname( __FILE__ ) . '/modules/',
     'remoteExtPath' => 'OpauthProfile/',
     'group' => 'ext.OpauthProfile',
-    'scripts' => '',
-    'styles' => ''
+    'scripts' => array(),
+    'styles' => array(
+    	'css/style.css'
+    ),
+	'position' => 'top'
 );
 
 /* Message Files */
@@ -67,3 +70,4 @@ $wgHooks['OpauthLoginUserCreated'][] = 'OpauthProfileHooks::onOpauthLoginUserCre
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'OpauthProfileHooks::onLoadExtensionSchemaUpdates';
 $wgHooks['PostLoginRedirect'][] = 'OpauthProfileHooks::onPostLoginRedirect';
 $wgHooks['OpauthLoginFinalRedirect'][] = 'OpauthProfileHooks::onOpauthLoginFinalRedirect';
+$wgHooks['AddNewAccount'][] = 'OpauthProfileHooks::onAddNewAccount';

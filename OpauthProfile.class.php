@@ -84,6 +84,11 @@ class OpauthProfile {
 
         if( $ret && $ret->numRows() ) {
             $this->data = $ret->fetchRow();
+	        foreach ($this->data as $key => $value) {
+		        if (is_int($key)) {
+			        unset($this->data[$key]);
+		        }
+	        }
         }
 
     }
