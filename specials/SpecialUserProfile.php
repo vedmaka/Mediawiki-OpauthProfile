@@ -76,7 +76,8 @@ class SpecialUserProfile extends SpecialPage {
 			'profile_phone' => '',
 			'profile_website' => '',
 			'badge' => $badge,
-			'badge_text' => wfMessage('opauthprofile-profilepage-special-edit-badge')->plain()
+			'badge_text' => wfMessage('opauthprofile-profilepage-special-edit-badge')->plain(),
+			'external_link' => $this->getUser()->getUserPage()->getFullURL()
 		);
 
 		$user = $this->getUser();
