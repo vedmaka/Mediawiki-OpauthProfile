@@ -11,16 +11,44 @@ class SpecialUserProfile extends SpecialPage {
 
 	public function execute( $subPage ) {
 
-		$this->displayProfile( true );
+		if( !$this->getUser()->isLoggedIn() ) {
+			$this->displayRestrictionError();
+		}
+
+		$this->displayProfile();
 
 	}
 
-	private function displayProfile( $editable = false ) {
+	private function displayProfile() {
 
 		$data = array(
-			'editable' => $editable,
-			'intro_text' => ''
+			'intro_text' => '',
+			'profile_picture' => '',
+			'profile_name' => '',
+			'profile_location' => '',
+			'profile_phone' => '',
+			'profile_website' => ''
 		);
+
+		$user = $this->getUser();
+		$profile = new OpauthProfile( $user->getId() );
+		if( $profile ) {
+			if( $profile->name ) {
+				$data['profile_name'] = $profile->name;
+			}
+			if( $profile->image ) {
+				$data['profile_picture'] = $profile->image;
+			}
+			if( $profile->location ) {
+				$data['profile_location'] = $profile->location;
+			}
+			if( $profile->phone ) {
+				$data['profile_phone'] = $profile->phone;
+			}
+			if( $profile->url ) {
+				$data['profile_website'] = $profile->url;
+			}
+		}
 
 		if( $this->getRequest()->getVal('from_social') == 'yes' ) {
 			$data['intro_text'] = wfMessage('opauthprofile-profilepage-intro-from-social')->plain();
