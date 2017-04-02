@@ -71,3 +71,4 @@ $wgHooks['LoadExtensionSchemaUpdates'][] = 'OpauthProfileHooks::onLoadExtensionS
 $wgHooks['PostLoginRedirect'][] = 'OpauthProfileHooks::onPostLoginRedirect';
 $wgHooks['OpauthLoginFinalRedirect'][] = 'OpauthProfileHooks::onOpauthLoginFinalRedirect';
 $wgHooks['AddNewAccount'][] = 'OpauthProfileHooks::onAddNewAccount';
+$wgHooks['ArticleViewHeader'][] = 'OpauthProfileHooks::onArticleViewHeader';
