@@ -154,11 +154,13 @@ class OpauthProfileHooks {
 				array('revision', 'page'),
 				array('rev_page', 'rev_len', 'rev_parent_id', 'rev_comment', 'rev_timestamp', 'page_namespace', 'page_title'),
 				array(
-					'rev_user' => $user->getId()
+					'rev_user' => $user->getId(),
+					'page_namespace' => 0
 				),
 				__METHOD__,
 				array(
-					'ORDER BY' => 'rev_timestamp DESC'
+					'ORDER BY' => 'rev_timestamp DESC',
+					'LIMIT' => 10
 				),
 				array(
 					'page' => array(
@@ -177,7 +179,7 @@ class OpauthProfileHooks {
 					'diff' => $row['rev_len'],
 					'page_text' => Title::newFromID( $row['rev_page'] )->getBaseText(),
 					'page_link' => Title::newFromID( $row['rev_page'] )->getFullURL(),
-					'time' => date( 'Y-m-d', wfTimestamp( TS_UNIX, $row['rev_timestamp']) )
+					'time' => date( 'j F Y', wfTimestamp( TS_UNIX, $row['rev_timestamp']) )
 				);
 
 				if( $row['rev_parent_id'] == 0 ) {
@@ -187,6 +189,9 @@ class OpauthProfileHooks {
 
 				$data['contributions']['revisions'][] = $item;
 			}
+
+			$data['has_edits'] = ($data['contributions']['edit_count'] > 0) ? true : false;
+			$data['morelink'] = SpecialPage::getTitleFor('Contributions')->getFullURL().'/'.$user->getName();
 
 			$templater = new TemplateParser( dirname(__FILE__).'/specials/templates/', true );
 			$html = $templater->processTemplate( 'userpage', $data );
