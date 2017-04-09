@@ -118,7 +118,14 @@ class OpauthProfileHooks {
 	public static function onArticleViewHeader( &$article, &$outputDone, &$pcache ) {
 		if( $article && $article->getTitle() && $article->getTitle()->getNamespace() == NS_USER ) {
 
-			$data = array();
+			$article->getContext()->getOutput()->addModuleStyles('ext.OpauthProfile.main');
+
+			$data = array(
+				'contributions' => array(
+					'edit_count' => 0,
+					'revisions' => array()
+				)
+			);
 
 			$user = User::newFromName( $article->getTitle()->getBaseText() );
 			$user->load();
@@ -138,6 +145,48 @@ class OpauthProfileHooks {
 			$data['location'] = $profile->location ? $profile->location : '-';
 			$data['website'] = $profile->url ? $profile->url : '-';
 			$data['phone'] = $profile->phone ? $profile->phone : '-';
+
+			// Gather user contributions
+			// For now just list most recent user contributions
+			$data['contributions']['edit_count'] = $user->getEditCount();
+			$dbr = wfGetDB(DB_SLAVE);
+			$result = $dbr->select(
+				array('revision', 'page'),
+				array('rev_page', 'rev_len', 'rev_parent_id', 'rev_comment', 'rev_timestamp', 'page_namespace', 'page_title'),
+				array(
+					'rev_user' => $user->getId()
+				),
+				__METHOD__,
+				array(
+					'ORDER BY' => 'rev_timestamp DESC'
+				),
+				array(
+					'page' => array(
+						'INNER JOIN', array(
+							'rev_page = page_id'
+						)
+					)
+				)
+			);
+
+			while( $row = $result->fetchRow() ) {
+
+				$item = array(
+					'type' => 'pencil',
+					'text' => 'edited', //$row['rev_comment'],
+					'diff' => $row['rev_len'],
+					'page_text' => Title::newFromID( $row['rev_page'] )->getBaseText(),
+					'page_link' => Title::newFromID( $row['rev_page'] )->getFullURL(),
+					'time' => date( 'Y-m-d', wfTimestamp( TS_UNIX, $row['rev_timestamp']) )
+				);
+
+				if( $row['rev_parent_id'] == 0 ) {
+					$item['type'] = 'plus';
+					$item['text'] = 'created';
+				}
+
+				$data['contributions']['revisions'][] = $item;
+			}
 
 			$templater = new TemplateParser( dirname(__FILE__).'/specials/templates/', true );
 			$html = $templater->processTemplate( 'userpage', $data );
