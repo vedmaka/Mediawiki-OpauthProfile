@@ -148,7 +148,7 @@ class OpauthProfileHooks {
 
 			// Gather user contributions
 			// For now just list most recent user contributions
-			$data['contributions']['edit_count'] = $user->getEditCount();
+
 			$dbr = wfGetDB(DB_SLAVE);
 			$result = $dbr->select(
 				array('revision', 'page'),
@@ -171,24 +171,31 @@ class OpauthProfileHooks {
 				)
 			);
 
-			while( $row = $result->fetchRow() ) {
+			if( $result && $result->numRows() ) {
 
-				$item = array(
-					'type' => 'pencil',
-					'text' => 'edited', //$row['rev_comment'],
-					'diff' => $row['rev_len'],
-					'page_text' => Title::newFromID( $row['rev_page'] )->getBaseText(),
-					'page_link' => Title::newFromID( $row['rev_page'] )->getFullURL(),
-					'time' => date( 'j F Y', wfTimestamp( TS_UNIX, $row['rev_timestamp']) )
-				);
+				$data['contributions']['edit_count'] = $result->numRows();
 
-				if( $row['rev_parent_id'] == 0 ) {
-					$item['type'] = 'plus';
-					$item['text'] = 'created';
+				while ( $row = $result->fetchRow() ) {
+
+					$item = array(
+						'type'      => 'pencil',
+						'text'      => 'edited', //$row['rev_comment'],
+						'diff'      => $row['rev_len'],
+						'page_text' => Title::newFromID( $row['rev_page'] )->getBaseText(),
+						'page_link' => Title::newFromID( $row['rev_page'] )->getFullURL(),
+						'time'      => date( 'j F Y', wfTimestamp( TS_UNIX, $row['rev_timestamp'] ) )
+					);
+
+					if ( $row['rev_parent_id'] == 0 ) {
+						$item['type'] = 'plus';
+						$item['text'] = 'created';
+					}
+
+					$data['contributions']['revisions'][] = $item;
 				}
 
-				$data['contributions']['revisions'][] = $item;
 			}
+
 
 			$data['has_edits'] = ($data['contributions']['edit_count'] > 0) ? true : false;
 			$data['morelink'] = SpecialPage::getTitleFor('Contributions')->getFullURL().'/'.$user->getName();
