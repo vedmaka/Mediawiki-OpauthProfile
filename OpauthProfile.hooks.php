@@ -92,8 +92,11 @@ class OpauthProfileHooks {
 	 *
 	 * @return bool
 	 */
-    public function onAddNewAccount( $user, $byEmail ) {
-		if( $byEmail ) {
+    public function onAddNewAccount( $user, $byEmail, $creator = null ) {
+		if( $creator === null ) {
+			// We know that this user was not created via OpauthLogin because only
+			// OpauthLogin supply 3rd parameter (equals `opauth`) hence we can consider
+			// user was registered via SignUp form with or without email provided
 			if( $user ) {
 
 				$profile = new OpauthProfile( $user->getId() );
