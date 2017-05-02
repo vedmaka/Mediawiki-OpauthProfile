@@ -6,14 +6,17 @@
     max-width: 100px;
 }
 
+.user-profile-patrols-list,
 .user-profile-contributions-list {
 
 }
 
+.user-profile-patrols-list li,
 .user-profile-contributions-list li {
     padding: 4px 0;
 }
 
+.user-profile-patrols-list li i,
 .user-profile-contributions-list li i {
     margin-right: 4px;
 }

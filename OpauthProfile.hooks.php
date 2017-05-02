@@ -205,11 +205,16 @@ class OpauthProfileHooks {
 			$patrols = SettleContributions::getInstance()->getUserPatrols( $user );
 			foreach ($patrols as $patrol) {
 
+				$title = Title::newFromID( $patrol['log_page'] );
+				if( !$title ) {
+					continue;
+				}
+
 				$data['contributions']['patrols'][] = array(
 					'text' => 'patrolled',
 					'time' => 	date( 'j F Y', wfTimestamp( TS_UNIX, $patrol['log_timestamp'] ) ),
-					'page_text' => Title::newFromID( $patrol['log_page'] )->getBaseText(),
-					'page_link' => Title::newFromID( $patrol['log_page'] )->getFullURL(),
+					'page_text' => $title->getBaseText(),
+					'page_link' => $title->getFullURL(),
 				);
 
 			}
@@ -219,6 +224,7 @@ class OpauthProfileHooks {
 
 			$data['has_edits'] = ($data['contributions']['edit_count'] > 0) ? true : false;
 			$data['morelink'] = SpecialPage::getTitleFor('Contributions')->getFullURL().'/'.$user->getName();
+			$data['morelink_patrols'] = SpecialPage::getTitleFor('Log')->getFullURL('type=patrol&user='.$user->getName().'&page=&year=&month=-1');
 
 			$templater = new TemplateParser( dirname(__FILE__).'/specials/templates/', true );
 			$html = $templater->processTemplate( 'userpage', $data );
