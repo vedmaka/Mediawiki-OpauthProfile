@@ -199,6 +199,23 @@ class OpauthProfileHooks {
 
 			}
 
+			$data['contributions']['user_patrols_count'] = SettleContributions::getInstance()->getUserPatrolsCount( $user );
+			$data['contributions']['patrols'] = array();
+
+			$patrols = SettleContributions::getInstance()->getUserPatrols( $user );
+			foreach ($patrols as $patrol) {
+
+				$data['contributions']['patrols'][] = array(
+					'text' => 'patrolled',
+					'time' => 	date( 'j F Y', wfTimestamp( TS_UNIX, $patrol['log_timestamp'] ) ),
+					'page_text' => Title::newFromID( $patrol['log_page'] )->getBaseText(),
+					'page_link' => Title::newFromID( $patrol['log_page'] )->getFullURL(),
+				);
+
+			}
+
+			$data['has_patrols'] = (count($patrols) ? true : false);
+
 
 			$data['has_edits'] = ($data['contributions']['edit_count'] > 0) ? true : false;
 			$data['morelink'] = SpecialPage::getTitleFor('Contributions')->getFullURL().'/'.$user->getName();

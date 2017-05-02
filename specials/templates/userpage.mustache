@@ -24,7 +24,7 @@
 
     </div>
 
-    <div class="col-md-8 user-profile-contributions">
+    <div class="col-md-4 user-profile-contributions">
         <h3>Contributions <small>{{ contributions.edit_count }}</small></h3>
 		<ul class="list-unstyled user-profile-contributions-list">
 	    {{# has_edits }}
@@ -44,5 +44,22 @@
 	    {{/ has_edits }}
 		</ul>
     </div>
+
+	<div class="col-md-4 user-profile-patrols-list">
+		<h3>Patrols <small>{{ contributions.user_patrols_count }}</small></h3>
+		{{# has_patrols }}
+			{{# contributions.patrols }}
+				<li>
+					<i class="fa fa-"></i>
+					<span class="text-muted"> {{time}} </span>
+					{{ text }}
+					<a href="{{&page_link}}" target="_blank">{{ page_text }}</a>
+				</li>
+			{{/contributions.patrols }}
+		{{/ has_patrols }}
+		{{^ has_patrols }}
+			<li>Nothing to show yet.</li>
+		{{/ has_patrols }}
+	</div>
 
 </div>
