@@ -25,6 +25,7 @@ class SpecialUserProfile extends SpecialPage {
 			$location = $this->getRequest()->getVal('profile_location');
 			$phone = $this->getRequest()->getVal('profile_phone');
 			$website = $this->getRequest()->getVal('profile_website');
+			$interests = $this->getRequest()->getVal('profile_interests');
 
 			$profile = new OpauthProfile( $this->getUser()->getId() );
 
@@ -42,6 +43,10 @@ class SpecialUserProfile extends SpecialPage {
 
 			if( $website ) {
 				$profile->url = $website;
+			}
+
+			if( $interests ) {
+				$profile->interests = $interests;
 			}
 
 			// Picture
@@ -75,6 +80,7 @@ class SpecialUserProfile extends SpecialPage {
 			'profile_location' => '',
 			'profile_phone' => '',
 			'profile_website' => '',
+			'profile_interests' => '',
 			'badge' => $badge,
 			'badge_text' => wfMessage('opauthprofile-profilepage-special-edit-badge')->plain(),
 			'external_link' => $this->getUser()->getUserPage()->getFullURL()
@@ -97,6 +103,9 @@ class SpecialUserProfile extends SpecialPage {
 			}
 			if( $profile->url ) {
 				$data['profile_website'] = $profile->url;
+			}
+			if( $profile->interests ) {
+				$data['profile_interests'] = $profile->interests;
 			}
 		}
 

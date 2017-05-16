@@ -26,6 +26,7 @@
                 {{/profile_picture}}
 
                 <input type="file" class="form-control" name="profile_picture" id="profile_picture" value="{{ profile_picture }}" style="line-height: 10px;">
+	            <p class="text-muted">Max. file size is 2MB</p>
             </div>
 
             <div class="form-group">
@@ -37,7 +38,7 @@
                 <label for="profile_location">Location</label>
                 <input type="text" class="form-control" name="profile_location" id="profile_location" value="{{ profile_location }}">
             </div>
-
+<!--
             <div class="form-group">
                 <label for="profile_phone">Phone</label>
                 <input type="tel" class="form-control" name="profile_phone" id="profile_phone" value="{{ profile_phone }}">
@@ -47,6 +48,12 @@
                 <label for="profile_website">Website</label>
                 <input type="url" class="form-control" name="profile_website" id="profile_website" value="{{ profile_website }}">
             </div>
+-->
+
+	        <div class="form-group">
+		        <label for="profile_interests">Interests</label>
+		        <textarea class="form-control" name="profile_interests" id="profile_interests">{{ profile_interests }}</textarea>
+	        </div>
 
             <div class="form-group">
                 <input type="submit" class="btn btn-success" value="Update profile" />

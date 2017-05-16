@@ -50,6 +50,12 @@ class OpauthProfileHooks {
             __DIR__ . '/schema/opauth_user_profile.sql'
         );
 
+        $updater->addExtensionField(
+        	'opauth_user_profile',
+	        'interests',
+	        __DIR__ . '/schema/opauth_user_profile_add_interests.sql'
+        );
+
     }
 
 	/**
@@ -148,6 +154,7 @@ class OpauthProfileHooks {
 			$data['location'] = $profile->location ? $profile->location : '-';
 			$data['website'] = $profile->url ? $profile->url : '-';
 			$data['phone'] = $profile->phone ? $profile->phone : '-';
+			$data['interests'] = $profile->interests ? $profile->interests : '-';
 
 			// Gather user contributions
 			// For now just list most recent user contributions

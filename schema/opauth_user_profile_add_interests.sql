@@ -1,0 +1,1 @@
+ALTER TABLE /*_*/opauth_user_profile ADD interests VARCHAR(2048) DEFAULT '';

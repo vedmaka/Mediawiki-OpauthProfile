@@ -20,6 +20,7 @@
  * @property string url
  * @property string provider
  * @property string uid
+ * @property string interests
  */
 class OpauthProfile {
 
